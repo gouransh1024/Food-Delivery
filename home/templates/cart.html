@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FDelivery Cart</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css"
+    rel="stylesheet"
+/></head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f8f8f8;
+    }
+    
+    .main {
+        width: 100%;
+        min-height: 100vh;
+        background-color: #fff;
+    }
+    
+    .heading {
+        width: 100%;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        background-color: #f94a3d;
+        color: #fff;
+    }
+    
+    .heading a {
+        text-decoration: none;
+        width: 20%;
+        font-size: 1.2rem;
+        margin-left: 1.5rem;
+    }
+    
+    .heading h1 {
+        font-size: 2rem;
+        margin-left: 20vw;
+        width:80%;
+        text-align: flex-start;
+    }
+    
+    .container {
+        width: 90%;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    
+    th, td {
+        border: 1px solid #ccc;
+        padding: 12px;
+        text-align: center;
+    }
+    
+    th {
+        background-color: #f94a3d;
+        color: #fff;
+        font-size: 1.2rem;
+    }
+    
+    img {
+        max-width: 50px;
+        height: auto;
+    }
+    
+    .btn-remove {
+        background-color: #f94a3d;
+        color: #fff;
+        padding: 6px 14px;
+        cursor: pointer;
+        border: none;
+        font-size: 0.9rem;
+        border-radius: 4px;
+        transition: background 0.2s;
+    }
+    .btn-remove:hover {
+        background-color: #d32f2f;
+    }
+    .btn-order {
+        background-color: #f94a3d;
+        width: 100%;
+        color: #fff;
+        height: 50px;
+        cursor: pointer;
+        border: none;
+        font-size: 1.2rem;
+        margin-top: 20px;
+        border-radius: 5px;
+        transition: background 0.2s;
+    }
+    .btn-order:hover {
+        background-color: #d32f2f;
+    }
+    .total-row td {
+        font-weight: 600;
+        font-size: 1.1rem;
+        background-color: #fff5f4;
+    }
+    .empty-cart {
+        text-align: center;
+        padding: 40px 20px;
+        font-size: 1.2rem;
+        color: #666;
+    }
+    .empty-cart a {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 10px 24px;
+        background: #f94a3d;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+    
+    @media screen and (min-width: 768px) {
+        .container {
+            width: 70%;
+        }
+    }
+    
+</style>
+<body>
+    <div class="main">
+        <div class="heading">
+            <a href="/"><i class="ri-arrow-left-double-line"></i>BACK</a>
+            <h1>Your Shopping Cart</h1>
+        </div>
+        <div class="container">
+
+        {% if cart %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Unit Price</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product_id, details in cart.items %}
+                <tr>
+                    <td><img src="{{ details.image }}" alt="{{ details.name }}"></td>
+                    <td>{{ details.name }}</td>
+                    <td>Rs. {{ details.price }}</td>
+                    <td>{{ details.quantity }}</td>
+                    <td>Rs. {{ details.subtotal }}</td>
+                    <td>
+                        <form method="post" action="{% url 'cart_view' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="remove_product_id" value="{{ product_id }}">
+                            <button type="submit" class="btn-remove">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr class="total-row">
+                    <td colspan="4" style="text-align: right; padding-right: 20px;"><strong>Grand Total:</strong></td>
+                    <td colspan="2"><strong>Rs. {{ total_price }}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    
+        <!-- Button for placing the order -->
+        <button class="btn-order" onclick="placeOrder()">Place Your Order</button>
+        {% else %}
+        <div class="empty-cart">
+            <p>Your shopping cart is currently empty.</p>
+            <a href="/home/">Explore Menu</a>
+        </div>
+        {% endif %}
+    
+    </div>
+</div>
+
+
+    <script>
+        function placeOrder() {
+            // You can add JavaScript logic here for handling the order placement
+            alert("Order placed successfully!"); // For example, show an alert
+        }
+    </script>
+    <script src="https://kit.fontawesome.com/b20b9e1db0.js" crossorigin="anonymous"></script>
+</body>
+</html>   
